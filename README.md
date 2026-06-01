@@ -63,7 +63,7 @@ SarvamRAG lets you chat with scanned documents — handwritten notes, printed PD
             ▼
   ┌─────────────────────┐
   │  TurboVec Search    │  ← top-k ANN on 4-bit index
-  │  (ARM NEON SIMD)    │    12–20% faster than FAISS on M4
+  │  (ARM NEON SIMD)    │    SIMD scoring kernel
   └─────────────────────┘
             │  chunk indices + scores
             ▼
@@ -89,7 +89,7 @@ SarvamRAG lets you chat with scanned documents — handwritten notes, printed PD
 |--|--|
 | **Sarvam Vision** | Handles 23 Indian languages (Devanagari, Tamil, Telugu, Bengali…) at ₹0.5/page — the only OCR engine built specifically for Indic-script documents. 35M+ pages digitized. Standard Tesseract/Google Vision fail on mixed-script and handwritten Indic content. |
 | **TurboVec (TurboQuant)** | Google Research, ICLR 2026. Compresses 31 GB of float32 vectors to ~4 GB with **zero training, no codebook, no offline step** — you just call `index.add(vectors)`. Quantizes to 4-bit with Lloyd-Max centroids computed on-the-fly. |
-| **ARM SIMD advantage** | TurboVec's blocked memory layout maps directly to Apple Silicon NEON lanes. On M4, it retrieves 12–20% faster than a FAISS flat index at equal recall. The whole index fits in unified memory. |
+| **ARM SIMD advantage** | TurboVec's blocked memory layout maps directly to Apple Silicon NEON lanes. The 4-bit quantized index fits entirely in M4's unified memory alongside the LLM, eliminating disk I/O at query time.
 | **No framework tax** | Pure Python + direct REST calls to Ollama. No LangChain, no LlamaIndex. Every line of the stack is readable; nothing is hidden behind an abstraction layer. |
 
 ---
